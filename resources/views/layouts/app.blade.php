@@ -23,6 +23,7 @@
 
         <!-- Styles -->
         @livewireStyles
+        @stack('styles')
     </head>
     <body class="font-sans antialiased">
         <x-banner />
@@ -46,7 +47,7 @@
         </div>
 
         @stack('modals')
-
+        @stack('scripts')
         @livewire('components.dark-mode')
         @livewire('admin.components.footer')
         @livewireScripts
