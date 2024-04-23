@@ -51,7 +51,7 @@ class UsersTable extends Component
     public function delete(User $user): void
     {
         $user->delete();
-        $this->dispatch('success', ['message' => 'Usuário deletado com sucesso!']);
+        flash()->addSuccess('Usuário deletado com sucesso!');
     }
 
     public function openCreateModal(): void
@@ -112,7 +112,7 @@ class UsersTable extends Component
             'password' => bcrypt($this->password),
         ]);
 
-        $this->dispatch('notify', ['type' => 'success', 'message' => 'Usuário criado com sucesso!']);
+        flash()->addSuccess('Usuário criado com sucesso!');
 
         $this->closeModal();
     }
@@ -124,7 +124,6 @@ class UsersTable extends Component
             'email' => 'required|email|max:255|unique:users,email,' . $this->selectedUserId,
         ];
 
-        // Senha só é obrigatória se estiver sendo fornecida
         if (!empty($this->password)) {
             $rules['password'] = 'nullable|string|min:8|confirmed';
         }
@@ -150,7 +149,7 @@ class UsersTable extends Component
 
         $user->update($updatedData);
 
-        $this->dispatch('notify', ['type' => 'success', 'message' => 'Usuário atualizado com sucesso!']);
+        flash()->addSuccess('Usuário atualizado com sucesso!');
 
         $this->closeModal();
     }
