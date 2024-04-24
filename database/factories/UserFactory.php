@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -68,5 +70,17 @@ class UserFactory extends Factory
                 ->when(is_callable($callback), $callback),
             'ownedTeams'
         );
+    }
+
+    public function configure(): UserFactory|Factory
+    {
+        return $this->afterCreating(function (User $user) {
+            $roles = Role::inRandomOrder()->limit(random_int(1, 3))->get();
+            $user->roles()->attach($roles);
+
+            UserDetail::factory()->create([
+                'user_id' => $user->id
+            ]);
+        });
     }
 }
