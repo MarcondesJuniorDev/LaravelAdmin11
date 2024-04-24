@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\Posts\SlideController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::prefix('usuarios')->group(function () {
         Route::get('/tabela-de-usuarios', [UserController::class, 'index'])->name('admin.users.index');
