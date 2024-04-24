@@ -105,6 +105,9 @@
                         @endif
                     </button>
                 </th>
+                <th scope="col" class="px-6 py-3">
+                    Funções
+                </th>
                 <th scope="col" class="px-6 py-3 text-end">
                     Ações
                 </th>
@@ -129,6 +132,13 @@
                     </td>
                     <td class="px-6 py-4">
                         {{ $user->email }}
+                    </td>
+                    <td class="px-6 py-4">
+                        @foreach($user->roles as $role)
+                            <span class="bg-blue-100 text-blue-600 dark:bg-blue-500 dark:text-white px-2 py-1 rounded-full text-xs space-x-2">
+                                {{ $role->name }}
+                            </span>
+                        @endforeach
                     </td>
                     <td class="px-6 py-4 text-end">
                         <button wire:click="openEditModal({{ $user->id }})" class="text-blue-600 hover:text-blue-900" title="Editar {{ $user->name }}">
@@ -222,6 +232,79 @@
                                                     </div>
                                                 </div>
                                             @endif
+                                            <div class="mb-4">
+                                                <label for="roles" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Funções</label>
+                                                <select wire:model="selectedRoles" multiple id="roles" name="roles[]" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : '' }}" @if($viewMode) disabled @endif>
+                                                    @foreach($roles as $role)
+                                                        <option value="{{ $role->id }}" {{ in_array($role->id, $selectedRoles) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('selectedPermissions') <span class="text-red-600">{{ $message }}</span> @enderror
+                                            </div>
+                                            <div class="grid grid-cols-2 space-x-2">
+                                                <div class="mb-4">
+                                                    <label for="featured_homepage" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Destaque</label>
+                                                    <select wire:model.defer="featured_homepage" id="featured_homepage" name="featured_homepage" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : '' }}" @if($viewMode) disabled @endif>
+                                                        <option value="yes" {{ $featured_homepage === 'yes' ? 'selected' : '' }}>Sim</option>
+                                                        <option value="no" {{ $featured_homepage === 'no' ? 'selected' : '' }}>Não</option>
+                                                    </select>
+                                                    @error('featured_homepage') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Status</label>
+                                                    <select wire:model.defer="status" id="status" name="status" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : '' }}" @if($viewMode) disabled @endif>
+                                                        <option value="active" {{ $status === 'active' ? 'selected' : '' }}>Ativo</option>
+                                                        <option value="inactive" {{ $status === 'inactive' ? 'selected' : '' }}>Inativo</option>
+                                                    </select>
+                                                    @error('status') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 grid grid-cols-2 space-x-2">
+                                                <div class="mb-4">
+                                                    <label for="website" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Website</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'website' : '' }}" type="url" name="website" id="website" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('website') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="lattes" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Currículo Lattes</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'lattes' : '' }}" type="url" name="lattes" id="lattes" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('lattes') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-3 space-x-2">
+                                                <div class="mb-4">
+                                                    <label for="facebook" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Facebook</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'facebook' : '' }}" type="url" name="facebook" id="facebook" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('facebook') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="instagram" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Instagram</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'instagram' : '' }}" type="url" name="instagram" id="instagram" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('instagram') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="twitter" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Twitter (X)</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'twitter' : '' }}" type="url" name="twitter" id="twitter" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('twitter') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-2 space-x-2">
+                                                <div class="mb-4">
+                                                    <label for="github" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Github</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'github' : '' }}" type="url" name="github" id="github" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('github') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="linkedin" class="block text-sm font-medium text-gray-700 dark:text-gray-200">LinkedIn</label>
+                                                    <input wire:model.defer="{{ !$viewMode || !$editMode ? 'linkedin' : '' }}" type="url" name="linkedin" id="linkedin" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="https://">
+                                                    @error('linkedin') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Sobre</label>
+                                                <textarea wire:model.defer="{{ !$viewMode || !$editMode ? 'about' : '' }}" id="about" name="about" rows="3" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md {{ $viewMode ? 'cursor-not-allowed' : ' ' }}" @if($viewMode) disabled @endif placeholder="Fale um pouco sobre você"></textarea>
+                                                @error('about') <span class="text-red-600">{{ $message }}</span> @enderror
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
