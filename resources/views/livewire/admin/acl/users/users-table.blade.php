@@ -23,15 +23,26 @@
             </div>
         </div>
     </div>
-
+    @if($selectedUsers)
+        <div class="p-4 justify-between sm:space-x-2 space-x-0 sm:space-y-0 space-y-2">
+            <div>
+                <button wire:click="deleteSelectedUsers" onclick="confirm('Tem certeza que deseja excluir todos os usuários selecionados ?') || event.stopImmediatePropagation()" title="Remover usuários selecionados?" class="w-full flex bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                    </svg>
+                    Deletar Usuários Selecionados ({{ count($selectedUsers) }})
+                </button>
+            </div>
+        </div>
+    @endif
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="p-4">
                     <div class="flex items-center">
-                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                        <input wire:model="selectAll" type="checkbox" class="sr-only w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label class="sr-only">Selecionar Todos</label>
                     </div>
                 </th>
                 <th scope="col" wire:click="sortBy('id')" class="px-6 py-3">
@@ -106,7 +117,7 @@
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="w-4 p-4">
                         <div class="flex items-center">
-                            <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <input type="checkbox" value="{{ $user->id }}" wire:model.live="selectedUsers" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                         </div>
                     </td>
@@ -184,6 +195,7 @@
                                                 Novo Usuário
                                             @endif
                                         </h3>
+                                        <hr>
                                         <div class="mt-2">
                                             <div class="grid grid-cols-2 space-x-2">
                                                 <div class="mb-4">
@@ -201,12 +213,12 @@
                                                 <div class="grid grid-cols-2 space-x-2">
                                                     <div class="mb-4">
                                                         <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Senha</label>
-                                                        <input wire:model.defer="password" type="password" name="password" id="password" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Senha">
+                                                        <input wire:model.defer="password" type="password" name="password" id="password" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="{{ $editMode ? 'Deixe vazio para não atualizar' : 'Senha' }}">
                                                         @error('password') <span class="text-red-600">{{ $message }}</span> @enderror
                                                     </div>
                                                     <div class="mb-4">
                                                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Confirme a Senha</label>
-                                                        <input wire:model.defer="password_confirmation" type="password" name="password_confirmation" id="password_confirmation" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Repita sua senha">
+                                                        <input wire:model.defer="password_confirmation" type="password" name="password_confirmation" id="password_confirmation" class="dark:bg-gray-700 text-gray-200 mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="{{ $editMode ? 'Deixe vazio para não atualizar' : 'Repita Sua Senha' }}">
                                                     </div>
                                                 </div>
                                             @endif
