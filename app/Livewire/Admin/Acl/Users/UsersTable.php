@@ -73,54 +73,11 @@ class UsersTable extends Component
         }
     }
 
-    public function delete(User $user): void
-    {
-        $user->delete();
-        flash()->addSuccess('Usuário deletado com sucesso!');
-    }
-
-    public function deleteSelectedUsers(): void
-    {
-        User::whereIn('id', $this->selectedUsers)->delete();
-        $this->selectedUsers = [];
-        $this->selectAll = false;
-        flash()->addSuccess('Usuários deletados com sucesso!');
-
-    }
-
     public function openCreateModal(): void
     {
         $this->reset(['name', 'email', 'password', 'password_confirmation', 'selectedRoles', 'image', 'about', 'featured_homepage', 'status', 'website', 'lattes', 'facebook', 'twitter', 'instagram', 'linkedin', 'github']);
         $this->showModal = true;
         $this->editMode = false;
-        $this->viewMode = false;
-    }
-
-    public function openEditModal($userId): void
-    {
-        $this->resetValidation();
-        $this->reset(['selectedRoles', 'image', 'about', 'featured_homepage', 'status', 'website', 'lattes', 'facebook', 'twitter', 'instagram', 'linkedin', 'github']);
-
-        $user = User::with('details', 'roles')->findOrFail($userId);
-        $this->selectedUserId = $userId;
-        $this->name = $user->name;
-        $this->email = $user->email;
-        $this->password = null;
-        $this->password_confirmation = null;
-        $this->selectedRoles = $user->roles->pluck('id')->toArray();
-        $this->image = $user->details->image;
-        $this->about = $user->details->about;
-        $this->featured_homepage = $user->details->featured_homepage;
-        $this->status = $user->details->status;
-        $this->website = $user->details->website;
-        $this->lattes = $user->details->lattes;
-        $this->facebook = $user->details->facebook;
-        $this->twitter = $user->details->twitter;
-        $this->instagram = $user->details->instagram;
-        $this->linkedin = $user->details->linkedin;
-        $this->github = $user->details->github;
-        $this->showModal = true;
-        $this->editMode = true;
         $this->viewMode = false;
     }
 
@@ -150,26 +107,32 @@ class UsersTable extends Component
         $this->viewMode = true;
     }
 
-    public function closeModal(): void
+    public function openEditModal($userId): void
     {
-        $this->reset([
-            'showModal',
-            'editMode',
-            'viewMode',
-            'selectedUserId',
-            'selectedRoles',
-            'image',
-            'about',
-            'featured_homepage',
-            'status',
-            'website',
-            'lattes',
-            'facebook',
-            'twitter',
-            'instagram',
-            'linkedin',
-            'github'
-        ]);
+        $this->resetValidation();
+        $this->reset(['selectedRoles', 'image', 'about', 'featured_homepage', 'status', 'website', 'lattes', 'facebook', 'twitter', 'instagram', 'linkedin', 'github']);
+
+        $user = User::with('details', 'roles')->findOrFail($userId);
+        $this->selectedUserId = $userId;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->password = null;
+        $this->password_confirmation = null;
+        $this->selectedRoles = $user->roles->pluck('id')->toArray();
+        $this->image = $user->details->image;
+        $this->about = $user->details->about;
+        $this->featured_homepage = $user->details->featured_homepage;
+        $this->status = $user->details->status;
+        $this->website = $user->details->website;
+        $this->lattes = $user->details->lattes;
+        $this->facebook = $user->details->facebook;
+        $this->twitter = $user->details->twitter;
+        $this->instagram = $user->details->instagram;
+        $this->linkedin = $user->details->linkedin;
+        $this->github = $user->details->github;
+        $this->showModal = true;
+        $this->editMode = true;
+        $this->viewMode = false;
     }
 
     public function createUser(): void
@@ -316,6 +279,43 @@ class UsersTable extends Component
         flash()->addSuccess('Usuário atualizado com sucesso!');
 
         $this->closeModal();
+    }
+
+    public function delete(User $user): void
+    {
+        $user->delete();
+        flash()->addSuccess('Usuário deletado com sucesso!');
+    }
+
+    public function deleteSelectedUsers(): void
+    {
+        User::whereIn('id', $this->selectedUsers)->delete();
+        $this->selectedUsers = [];
+        $this->selectAll = false;
+        flash()->addSuccess('Usuários deletados com sucesso!');
+
+    }
+
+    public function closeModal(): void
+    {
+        $this->reset([
+            'showModal',
+            'editMode',
+            'viewMode',
+            'selectedUserId',
+            'selectedRoles',
+            'image',
+            'about',
+            'featured_homepage',
+            'status',
+            'website',
+            'lattes',
+            'facebook',
+            'twitter',
+            'instagram',
+            'linkedin',
+            'github'
+        ]);
     }
 
     public function render(): View
