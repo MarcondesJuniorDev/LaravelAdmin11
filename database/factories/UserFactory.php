@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
@@ -81,6 +82,9 @@ class UserFactory extends Factory
             UserDetail::factory()->create([
                 'user_id' => $user->id
             ]);
+
+            $departments = Department::inRandomOrder()->limit(random_int(1, 3))->get();
+            $user->departments()->attach($departments);
         });
     }
 }
