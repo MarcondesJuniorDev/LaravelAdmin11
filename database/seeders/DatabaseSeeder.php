@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -26,5 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'super@super.com',
             'password' => bcrypt('M4rc0nd35'),
         ]);
+
+        Department::factory(50)->create();
     }
 }
