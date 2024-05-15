@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                Página do Ensino Fundamental
+                Página do Ensino Fundamental - 1º ao 9º ano
             </div>
         </div>
     </div>
